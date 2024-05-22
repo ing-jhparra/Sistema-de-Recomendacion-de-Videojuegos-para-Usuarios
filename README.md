@@ -27,7 +27,7 @@
 
 * [Recursos](#Recursos)
 
-* [Créditos](#Creditos)
+* [Créditos](#Créditos)
 
 
 # Glosario
@@ -63,6 +63,10 @@
 ## "Prolijidad" del codigo:
 
 * [About docstrings and standards](https://pandas.pydata.org/docs/development/contributing_docstring.html) <br>
+
+## Otros 
+
+* [Introduction to Exploratory Data Analysis (EDA)](https://learn.toanhoang.com/courses/take/creating-bespoke-data-visualisations-in-tableau-part-one/lessons/18775341-index-function)
 
 # Créditos
 Copyright (c) 2024 [Ing. Jesús parra] parra.jesus@gmail.com
