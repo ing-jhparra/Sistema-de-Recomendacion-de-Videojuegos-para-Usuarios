@@ -19,13 +19,15 @@ app = FastAPI(
     version='1.0 / Jesus Parra (2024)'
 )
 
-#ruta = ".\\Datasets\\"
-#datasets = ["steam_games.parquet", "users_items.parquet", "user_review.parquet", "developer.parquet" ]
+ruta = ".\\Datasets\\"
+datasets = '' # ["steam_games.parquet", "users_items.parquet", "user_review.parquet", "developer.parquet" ]
 url_developer = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/23fca09336a144d889c7895cc55777af12ea11fc/Datasets/developer.parquet?raw=True'
 
-df_game = pd.read_parquet(ruta + datasets[0])
-df_items = pd.read_parquet(ruta + datasets[1])
-df_reviews = pd.read_parquet(ruta + datasets[2])
+
+df_game = pd.read_parquet(ruta + datasets)
+df_items = pd.read_parquet(ruta + datasets)
+df_reviews = pd.read_parquet(ruta + datasets)
+
 df_developer = pd.read_parquet(url_developer,engine='auto')
 
 
@@ -91,9 +93,9 @@ def userdata(user_id):
     # Filtra por el usuario de interés
     usuario = df_userdata[df_userdata['user_id'] == user_id]
     # Calcula la cantidad de dinero gastado para el usuario de interés
-    cantidad_dinero = df_gastos_items[df_gastos_items['user_id']== user_id]['price'].iloc[0]
+    ## cantidad_dinero = df_gastos_items[df_gastos_items['user_id']== user_id]['price'].iloc[0]
     # Busca el count_item para el usuario de interés    
-    count_items = df_gastos_items[df_gastos_items['user_id']== user_id]['items_count'].iloc[0]
+    ## count_items = df_gastos_items[df_gastos_items['user_id']== user_id]['items_count'].iloc[0]
     
     # Calcula el total de recomendaciones realizadas por el usuario de interés
     total_recomendaciones = usuario['reviews_recommend'].sum()
@@ -101,9 +103,13 @@ def userdata(user_id):
     total_reviews = len(df_reviews['user_id'].unique())
     # Calcula el porcentaje de recomendaciones realizadas por el usuario de interés
     porcentaje_recomendaciones = (total_recomendaciones / total_reviews) * 100
-    
+
+    return 0
+   
+    '''
     return {
         'cantidad_dinero': int(cantidad_dinero),
         'porcentaje_recomendacion': round(float(porcentaje_recomendaciones), 2),
         'total_items': int(count_items)
     }
+    '''
