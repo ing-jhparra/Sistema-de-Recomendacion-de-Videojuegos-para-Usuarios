@@ -19,13 +19,14 @@ app = FastAPI(
     version='1.0 / Jesus Parra (2024)'
 )
 
-ruta = ".\\Datasets\\"
-datasets = ["steam_games.parquet", "users_items.parquet", "user_review.parquet", "developer.parquet" ]
+#ruta = ".\\Datasets\\"
+#datasets = ["steam_games.parquet", "users_items.parquet", "user_review.parquet", "developer.parquet" ]
+url_developer = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/23fca09336a144d889c7895cc55777af12ea11fc/Datasets/developer.parquet?raw=True'
 
 df_game = pd.read_parquet(ruta + datasets[0])
 df_items = pd.read_parquet(ruta + datasets[1])
 df_reviews = pd.read_parquet(ruta + datasets[2])
-df_developer = pd.read_parquet(ruta + datasets[3])
+df_developer = pd.read_parquet(url_developer,engine='auto')
 
 
 @app.get('/', tags=['inicio'])
