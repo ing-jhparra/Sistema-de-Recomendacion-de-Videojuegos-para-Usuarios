@@ -1,0 +1,15 @@
+fastapi
+fastapi-cli
+fastparquet
+numpy
+pandas
+requests
+uvicorn
+matplotlib
+matplotlib-inline
+nltk
+regex
+scipy
+scikit-learn
+seaborn
+uvicorn
