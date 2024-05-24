@@ -19,10 +19,15 @@ app = FastAPI(
     version='1.0 / Jesus Parra (2024)'
 )
 
-url_developer = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/23fca09336a144d889c7895cc55777af12ea11fc/Datasets/developer.parquet?raw=True'
+# URL de Datasets
+ruta_developer = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/23fca09336a144d889c7895cc55777af12ea11fc/Datasets/developer.parquet'
+ruta_user_items = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/63c02be8130aacc4fb995e5608f4c0b8febe3a7e/Datasets/users_items.parquet?raw=True'
+ruta_user_reviews = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/63c02be8130aacc4fb995e5608f4c0b8febe3a7e/Datasets/user_review.parquet?raw=True'
 
-df_developer = pd.read_parquet(url_developer,engine='auto')
-
+# Abrir y cargar Dataset a un dataframe
+df_developer = pd.read_parquet(ruta_developer+'?raw=True',engine='auto')
+df_user_items = pd.read_parquet(ruta_user_items)
+df_user_review = pd.read_parquet(ruta_user_reviews)
 
 @app.get('/', tags=['inicio'])
 async def inicio():
@@ -34,7 +39,7 @@ Endpoint 1 : Cantidad de items y porcentaje de contenido Free por año según em
 """
 
 @app.get("/developer/{desarrollador}",  tags=['developer'])
-def developer(desarrollador):
+async def developer(desarrollador):
     '''
     Devuelve por año, cantidad de items y porcentaje de contenido libre por empresa desarrolladora
     
@@ -49,18 +54,64 @@ def developer(desarrollador):
                Cantidad Items : Videos juegos desarrollados por año
                Contenido Free : Contenidos gratuito pro año
     '''
+    
+    lista_diccioanario = {"Anio" : list(),"Cantidad de items" : list(),"Porcentaje de contenido Free" : list()}
+
     # Filtramos por desarrollador
-    filtrado_desarrollador = df_developer[df_developer['developer'] == desarrollador]
+    el_desarrollador = df_developer[df_developer['developer'] == desarrollador]
     # Calcula el total de items por año
-    cantidad_items = filtrado_desarrollador.groupby('year')['item_id'].count()
+    cantidad_items = el_desarrollador.groupby('year')['item_id'].count()
     # Calcula el total de contenido gratis por año
-    cantidad_gratis = filtrado_desarrollador[filtrado_desarrollador['price'] == 0.0].groupby('year')['item_id'].count()
+    cantidad_gratis = el_desarrollador[el_desarrollador['price'] == 0.0].groupby('year')['item_id'].count()
     # Calcula el porcentaje de contenido gratis por año
     porcentaje_gratis = (cantidad_gratis / cantidad_items * 100).fillna(0).astype(int)
-
-    diccionario = {
-        'Cantidad de items': cantidad_items.to_dict(),
-        'Porcentaje de contenido Free': porcentaje_gratis.to_dict()
-    }
+    # Damos formato para el retorno de la informacion
+    for year, item_id_counts in cantidad_items.items():
+        lista_diccioanario["Anio"].append(year)
+        lista_diccioanario["Cantidad de items"].append(item_id_counts)
+    for year, item_porc in porcentaje_gratis.items():
+        lista_diccioanario["Porcentaje de contenido Free"].append(item_porc)
     
-    return diccionario
+    diccionario = pd.DataFrame(lista_diccioanario).to_dict(orient='records')
+    
+    return  "No existen registros" if len(el_desarrollador) == 0 else diccionario 
+
+@app.get("/userdata/{user_id}",  tags=['userdata'])
+async def userdata(user_id):
+    '''
+    Devuelve la cantidad de dinero gastado por el usuario, el porcentaje de recomendación y cantidad de items
+             
+    Parametro
+    ---------
+    str
+        user_id : Identificador del usuario.
+    
+    Retorna
+    -------
+        dict: Diccionario 
+              
+              Usuario                  : Identificador del Usuario
+              Cantidad Dinero          : Cantidad de dinero gastado.
+              Porcentaje Recomendacion : Porcentaje de recomendaciones.
+              Total de Items           : Cantidad de items.
+    '''
+    los_juegos = df_developer[['item_id','price']]
+    el_usuario = df_user_review[df_user_review['user_id']== user_id]
+    recomendado = round(el_usuario[el_usuario["recommend"]==True].count() / (el_usuario[el_usuario["recommend"]==True].count() + 
+                                                                           el_usuario[el_usuario["recommend"]==False].count()) * 100,2).iloc[0]
+    los_items = df_user_items[df_user_items['user_id'] == user_id]
+    los_items = los_items.merge(los_juegos, on = 'item_id',  how='inner')
+    los_items = los_items.groupby('user_id').agg({'playtime_forever':'sum',
+                                                  'price':'sum'}).reset_index()
+    
+    el_usuario = str(los_items['user_id'].iloc[0]),
+    el_tiempo = los_items['playtime_forever'].iloc[0],
+    el_dinero = round(los_items['price'].iloc[0],2)
+    
+    diccionario = { 
+                    "Usuario" : el_usuario,
+                    "Dinero gastado":el_dinero,
+                    "Porcentaje de recomendación": recomendado
+                  }
+    
+    return "No existen registros" if len(el_usuario) == 0 else diccionario 
