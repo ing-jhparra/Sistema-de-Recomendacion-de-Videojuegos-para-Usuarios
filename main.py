@@ -21,13 +21,13 @@ app = FastAPI(
 
 # URL de Datasets
 ruta_developer = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/23fca09336a144d889c7895cc55777af12ea11fc/Datasets/developer.parquet'
-ruta_user_items = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/63c02be8130aacc4fb995e5608f4c0b8febe3a7e/Datasets/users_items.parquet?raw=True'
-ruta_user_reviews = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/63c02be8130aacc4fb995e5608f4c0b8febe3a7e/Datasets/user_review.parquet?raw=True'
+ruta_user_items = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/72fb0db7312190f03844e6dc3d4d7d85374c3a7f/Datasets/users_items20.parquet'
+ruta_user_reviews = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/63c02be8130aacc4fb995e5608f4c0b8febe3a7e/Datasets/user_review.parquet'
 
 # Abrir y cargar Dataset a un dataframe
-df_developer = pd.read_parquet(ruta_developer+'?raw=True',engine='auto')
-df_user_items = pd.read_parquet(ruta_user_items)
-df_user_review = pd.read_parquet(ruta_user_reviews)
+df_developer = pd.read_parquet(ruta_developer + '?raw=True',engine='auto')
+df_user_items = pd.read_parquet(ruta_user_items + '?raw=True',engine='auto')
+df_user_review = pd.read_parquet(ruta_user_reviews + '?raw=True',engine='auto')
 
 @app.get('/', tags=['inicio'])
 async def inicio():
@@ -104,7 +104,7 @@ async def userdata(user_id):
     los_items = los_items.groupby('user_id').agg({'playtime_forever':'sum',
                                                   'price':'sum'}).reset_index()
     
-    el_usuario = str(los_items['user_id'].iloc[0]),
+    el_usuario = los_items['user_id'].iloc[0],
     el_tiempo = los_items['playtime_forever'].iloc[0],
     el_dinero = round(los_items['price'].iloc[0],2)
     
