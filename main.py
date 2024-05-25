@@ -2,7 +2,6 @@
 Autor : Ing. Jesus Parra
 Año 2024
 """
-import __main__
 import pandas as pd
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
@@ -21,22 +20,18 @@ app = FastAPI(
 
 # URL de Datasets
 ruta_developer = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/23fca09336a144d889c7895cc55777af12ea11fc/Datasets/developer.parquet'
-ruta_user_items = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/72fb0db7312190f03844e6dc3d4d7d85374c3a7f/Datasets/users_items20.parquet'
+ruta_user_items = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/4470d8eb352604a814323e260b97f66c71c8ba5b/Datasets/users_items_30mil.parquet'
 ruta_user_reviews = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/63c02be8130aacc4fb995e5608f4c0b8febe3a7e/Datasets/user_review.parquet'
 
 # Abrir y cargar Dataset a un dataframe
-df_developer = pd.read_parquet(ruta_developer + '?raw=True',engine='auto')
-df_user_items = pd.read_parquet(ruta_user_items + '?raw=True',engine='auto')
-df_user_review = pd.read_parquet(ruta_user_reviews + '?raw=True',engine='auto')
+df_developer = pd.read_parquet(ruta_developer + '?raw=True', engine='auto')
+df_user_items = pd.read_parquet(ruta_user_items + '?raw=True', engine='auto')
+df_user_review = pd.read_parquet(ruta_user_reviews + '?raw=True', engine='auto')
 
 @app.get('/', tags=['inicio'])
 async def inicio():
     cuerpo = '<center><h1 style="background-color:#daecfe;">Proyecto Individual Numero 1:<br>Machine Learning Operations (MLOps)</h1></center>'
     return HTMLResponse(cuerpo)
-
-"""
-Endpoint 1 : Cantidad de items y porcentaje de contenido Free por año según empresa desarrolladora.
-"""
 
 @app.get("/developer/{desarrollador}",  tags=['developer'])
 async def developer(desarrollador):
@@ -74,10 +69,11 @@ async def developer(desarrollador):
     
     diccionario = pd.DataFrame(lista_diccioanario).to_dict(orient='records')
     
-    return  "No existen registros" if len(el_desarrollador) == 0 else diccionario 
+    return  "No existen registros" if len(el_desarrollador) == 0 else diccionario
 
 @app.get("/userdata/{user_id}",  tags=['userdata'])
 async def userdata(user_id):
+
     '''
     Devuelve la cantidad de dinero gastado por el usuario, el porcentaje de recomendación y cantidad de items
              
@@ -90,28 +86,22 @@ async def userdata(user_id):
     -------
         dict: Diccionario 
               
-              Usuario                  : Identificador del Usuario
               Cantidad Dinero          : Cantidad de dinero gastado.
               Porcentaje Recomendacion : Porcentaje de recomendaciones.
               Total de Items           : Cantidad de items.
     '''
     los_juegos = df_developer[['item_id','price']]
-    el_usuario = df_user_review[df_user_review['user_id']== user_id]
-    recomendado = round(el_usuario[el_usuario["recommend"]==True].count() / (el_usuario[el_usuario["recommend"]==True].count() + 
-                                                                           el_usuario[el_usuario["recommend"]==False].count()) * 100,2).iloc[0]
+    el_usuario = df_user_review[df_user_review['user_id'] == user_id]
+    recomendado = round(el_usuario[el_usuario["recommend"] == True].count() / (el_usuario[el_usuario["recommend"]==True].count() + 
+                                                                            el_usuario[el_usuario["recommend"]==False].count()) * 100,2).iloc[0]
+    
     los_items = df_user_items[df_user_items['user_id'] == user_id]
-    los_items = los_items.merge(los_juegos, on = 'item_id',  how='inner')
-    los_items = los_items.groupby('user_id').agg({'playtime_forever':'sum',
-                                                  'price':'sum'}).reset_index()
-    
-    el_usuario = los_items['user_id'].iloc[0],
-    el_tiempo = los_items['playtime_forever'].iloc[0],
-    el_dinero = round(los_items['price'].iloc[0],2)
-    
-    diccionario = { 
-                    "Usuario" : el_usuario,
-                    "Dinero gastado":el_dinero,
-                    "Porcentaje de recomendación": recomendado
-                  }
-    
-    return "No existen registros" if len(el_usuario) == 0 else diccionario 
+    los_items = los_items.merge(los_juegos, on = 'item_id',  how='left').fillna(0.0)
+    los_items = los_items.groupby('user_id').agg({'item_id':'sum','price':'sum'}).reset_index()
+
+    claves = ["Usuario", "Dinero gastado", "Porcentaje de recomendación", "Cantidad"]
+    valor = [los_items["user_id"].iloc[0],los_items['price'].iloc[0], recomendado, int(los_items["item_id"].iloc[0])]
+
+    diccionario = dict(zip(claves,valor))
+
+    return "No existen registros" if len(los_juegos) == 0 else diccionario
