@@ -10,6 +10,15 @@ from sklearn.metrics.pairwise import linear_kernel
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 
+# URL de Datasets
+ruta_developer = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/23fca09336a144d889c7895cc55777af12ea11fc/Datasets/developer.parquet'
+ruta_user_items = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/0720744849183ac0c4d55bed06fbed8b4550ffa5/Datasets/users_items_25mil.parquet'
+ruta_user_reviews = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/63c02be8130aacc4fb995e5608f4c0b8febe3a7e/Datasets/user_review.parquet'
+
+# Abrir y cargar Dataset a un dataframe
+df_developer = pd.read_parquet(ruta_developer + '?raw=True', engine='auto')
+df_user_items = pd.read_parquet(ruta_user_items + '?raw=True', engine='auto')
+df_user_review = pd.read_parquet(ruta_user_reviews + '?raw=True', engine='auto')
 
 # Instanciamos la clase FastAPI
 app = FastAPI( 
@@ -17,16 +26,6 @@ app = FastAPI(
     description='API para realizar consultas',
     version='1.0 / Jesus Parra (2024)'
 )
-
-# URL de Datasets
-ruta_developer = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/23fca09336a144d889c7895cc55777af12ea11fc/Datasets/developer.parquet'
-ruta_user_items = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/4470d8eb352604a814323e260b97f66c71c8ba5b/Datasets/users_items_30mil.parquet'
-ruta_user_reviews = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/63c02be8130aacc4fb995e5608f4c0b8febe3a7e/Datasets/user_review.parquet'
-
-# Abrir y cargar Dataset a un dataframe
-df_developer = pd.read_parquet(ruta_developer + '?raw=True', engine='auto')
-df_user_items = pd.read_parquet(ruta_user_items + '?raw=True', engine='auto')
-df_user_review = pd.read_parquet(ruta_user_reviews + '?raw=True', engine='auto')
 
 @app.get('/', tags=['inicio'])
 async def inicio():
