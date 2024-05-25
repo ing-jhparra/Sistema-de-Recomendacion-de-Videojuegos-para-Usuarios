@@ -1,4 +1,6 @@
 .venv
 __pycache__
- Datasets/users_items.parquet
- Datasets/users_items20.parquet
+Datasets/users_items.parquet
+Datasets/users_items20.parquet
+Datasets/users_items20.parquet
+Datasets/users_items_500mil.parquet
