@@ -1,11 +1,4 @@
-<div align="center">
-  <h1 align="center">
-    Machine Learning Operations (MLOps)
-    <br />
-    <br />
-      <img src="https://www.dropbox.com/scl/fi/4oklzfnj5j4bud506auop/DiagramaConceptualDelFlujoDeProcesos.png?rlkey=fb6o7ch2r2vgavld41w1iua1j&st=konf9em3&dl=0" alt="Machine Learning Operations (MLOps)">
-  </h1>
-</div>
+![Machine Learning Operations (MLOps)](https://www.dropbox.com/scl/fi/4oklzfnj5j4bud506auop/DiagramaConceptualDelFlujoDeProcesos.png?rlkey=fb6o7ch2r2vgavld41w1iua1j&st=konf9em3&dl=0)
 
 <h4 align="center">
 :construction: Tema en fase de desarrollo y prueba :construction:
