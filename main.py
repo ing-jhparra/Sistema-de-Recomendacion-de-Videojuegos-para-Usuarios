@@ -22,10 +22,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # Rutas de Datasets que utilizara los endpoints
 
-ruta_developer = r'./Datasets/developer.parquet'
-ruta_user_items = r'./Datasets/users_items.parquet'
-ruta_user_reviews =  r'./Datasets/user_review.parquet'
-ruta_sentiment_analysis =  r'./Datasets/sentiment_analysis.parquet'
+ruta_developer = r'Datasets/developer.parquet'
+ruta_user_items = r'Datasets/users_items.parquet'
+ruta_user_reviews =  r'Datasets/user_review.parquet'
+ruta_sentiment_analysis =  r'Datasets/sentiment_analysis.parquet'
 
 # Abrir y cargar Dataset para ser utilizados por los endpoints
 
