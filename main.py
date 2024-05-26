@@ -34,14 +34,14 @@ ruta_sentiment_analysis = rutas_dataset[0] + 'sentiment_analysis.parquet'
 # Si estamos en un sistemas Linux
 
 ruta_developer = rutas_dataset[1] + 'developer.parquet'
-ruta_user_items = rutas_dataset[1] + 'users_items_25mil.parquet'
+ruta_user_items = rutas_dataset[1] + 'users_items.parquet'
 ruta_user_reviews = rutas_dataset[1] + 'user_review.parquet'
 ruta_sentiment_analysis = rutas_dataset[1] + 'sentiment_analysis.parquet'
 
 # Abrir y cargar Dataset para ser utilizados por los endpoints
 
 df_developer = pd.read_parquet(ruta_developer)
-df_user_items = pd.read_parquet(ruta_user_items])
+df_user_items = pd.read_parquet(ruta_user_items)
 df_user_review = pd.read_parquet(ruta_user_reviews)
 df_sentiment_analysis = pd.read_parquet(ruta_sentiment_analysis)
 
