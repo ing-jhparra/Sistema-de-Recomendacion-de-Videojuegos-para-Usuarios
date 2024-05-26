@@ -6,3 +6,5 @@ uvicorn
 nltk
 scikit-learn
 seaborn
+fastparquet
+pyarrow
