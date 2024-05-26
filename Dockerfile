@@ -1,8 +1,12 @@
-FROM python:3.9
+FROM python:3.12
+
+USER root
 
 WORKDIR /code
 
 COPY ./requirements.txt /code/requirements.txt
+
+RUN pip install fastapi && pip install uvicorn
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
