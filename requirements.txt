@@ -1,10 +1,14 @@
 fastapi
+fastapi-cli
+fastparquet
 numpy
 pandas
 requests
-uvicorn
 nltk
 scikit-learn
 seaborn
-fastparquet
 pyarrow
+uvicorn
+decorator
+pydantic_core
+tqdm
