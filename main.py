@@ -29,10 +29,10 @@ ruta_sentiment_analysis =  'Datasets\sentiment_analysis.parquet'
 
 # Abrir y cargar Dataset para ser utilizados por los endpoints
 
-df_developer = pd.read_parquet(ruta_developer, engine='fastparquet')
-df_user_items = pd.read_parquet(ruta_user_items, engine='fastparquet')
-df_user_review = pd.read_parquet(ruta_user_reviews, engine='fastparquet')
-df_sentiment_analysis = pd.read_parquet(ruta_sentiment_analysis, engine='fastparquet')
+df_developer = pd.read_parquet(ruta_developer, engine='auto')
+df_user_items = pd.read_parquet(ruta_user_items, engine='auto')
+df_user_review = pd.read_parquet(ruta_user_reviews, engine='auto')
+df_sentiment_analysis = pd.read_parquet(ruta_sentiment_analysis, engine='auto')
 
 # Declaracion y definicion del modelo similitud del coseno para Machine Learning
 # En este ejercicio me base en el siguiente video https://www.youtube.com/watch?v=7nago29IlxM&t=149s
