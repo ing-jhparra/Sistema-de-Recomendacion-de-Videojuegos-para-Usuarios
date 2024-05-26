@@ -3,7 +3,7 @@
     Machine Learning Operations (MLOps)
     <br />
     <br />
-      <img src="./img/MLOPS.png" alt="Herramientas Big Data">
+      <img src="https://www.dropbox.com/scl/fi/4oklzfnj5j4bud506auop/DiagramaConceptualDelFlujoDeProcesos.png?rlkey=fb6o7ch2r2vgavld41w1iua1j&st=konf9em3&dl=0" alt="Machine Learning Operations (MLOps)">
   </h1>
 </div>
 
