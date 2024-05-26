@@ -5,3 +5,4 @@ requests
 uvicorn
 nltk
 scikit-learn
+seaborn
