@@ -1,52 +1,78 @@
 """
-Autor : Ing. Jesus Parra
+Estudiante : Jesus H. Parra B.
+Academia : Henry
+Carrera : Data Science 
+Direccion Web : https://www.soyhenry.com/
+email : parra.jesus@gmail.com
 Año 2024
 """
+# LIbrerias necesaria
+
+import numpy as np
 import pandas as pd
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
+import seaborn as sns
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
-# URL de Datasets
-ruta_developer = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/23fca09336a144d889c7895cc55777af12ea11fc/Datasets/developer.parquet'
-ruta_user_items = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/0720744849183ac0c4d55bed06fbed8b4550ffa5/Datasets/users_items_25mil.parquet'
-ruta_user_reviews = 'https://github.com/ing-jhparra/Sistema-de-Recomendacion-de-Videojuegos-para-Usuarios/blob/63c02be8130aacc4fb995e5608f4c0b8febe3a7e/Datasets/user_review.parquet'
+# Rutas de Datasets que utilizara los endpoints
+ruta_developer = 'Datasets\\developer.parquet'
+ruta_user_items = 'Datasets\\users_items_25mil.parquet'
+ruta_user_reviews = 'Datasets\\user_review.parquet'
+ruta_sentiment_analysis = 'Datasets\\sentiment_analysis.parquet'
 
-# Abrir y cargar Dataset a un dataframe
-df_developer = pd.read_parquet(ruta_developer + '?raw=True', engine='auto')
-df_user_items = pd.read_parquet(ruta_user_items + '?raw=True', engine='auto')
-df_user_review = pd.read_parquet(ruta_user_reviews + '?raw=True', engine='auto')
+# Abrir y cargar Dataset para ser utilizados por los endpoints
 
-# Instanciamos la clase FastAPI
+df_developer = pd.read_parquet(ruta_developer)
+df_user_items = pd.read_parquet(ruta_user_items)
+df_user_review = pd.read_parquet(ruta_user_reviews)
+df_sentiment_analysis = pd.read_parquet(ruta_sentiment_analysis)
+
+# Declaracion y definicion del modelo similitud del coseno para Machine Learning
+# En este ejercicio me base en el siguiente video https://www.youtube.com/watch?v=7nago29IlxM&t=149s
+
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(df_sentiment_analysis["review"])
+    
+feactures =  np.column_stack([tfidf_matrix.toarray(), df_sentiment_analysis["recommend"], df_sentiment_analysis["sentiment_analysis"]])
+
+similarity_matrix = cosine_similarity(feactures)
+
+df_sentiment_analysis = df_sentiment_analysis.reset_index(drop=True)
+
+# Declaracion y definicion de la clase FastAPI
 app = FastAPI( 
     title = 'Machine Learning Operations (MLOps)',
     description='API para realizar consultas',
     version='1.0 / Jesus Parra (2024)'
 )
 
+# Se muestra en la siguiente ruta un sencillo titulo http://127.0.0.1:8000/
 @app.get('/', tags=['inicio'])
 async def inicio():
     cuerpo = '<center><h1 style="background-color:#daecfe;">Proyecto Individual Numero 1:<br>Machine Learning Operations (MLOps)</h1></center>'
     return HTMLResponse(cuerpo)
 
+# Endpoint http://127.0.0.1:8000/developer/{desarrollador} 
 @app.get("/developer/{desarrollador}",  tags=['developer'])
-async def developer(desarrollador):
+async def developer(desarrollador : str):
     '''
-    Devuelve por año, cantidad de items y porcentaje de contenido libre por empresa desarrolladora
-    
+    Devuelve un diccionario año, cantidad de items y porcentaje de contenido libre por empresa desarrolladora
+             
     Parametro
-    ---------
-    str
-        desarrollador : Nombre de la empresa desarrolladora
+    ---------  
+            desarrollador : Nombre de la empresa desarrolladora
     
     Retorna
     -------
-    dict : Diccionario 
-               Cantidad Items : Videos juegos desarrollados por año
-               Contenido Free : Contenidos gratuito pro año
+            Anio                         : Año
+            Cantidad Items               : Videos juegos desarrollados
+            Porcentaje de contenido Free : Porcetnaje de contenidos gratuito
     '''
     
     lista_diccioanario = {"Anio" : list(),"Cantidad de items" : list(),"Porcentaje de contenido Free" : list()}
@@ -70,27 +96,28 @@ async def developer(desarrollador):
     
     return  "No existen registros" if len(el_desarrollador) == 0 else diccionario
 
+# Endpoint http://127.0.0.1:8000/userdata/{user_id} 
 @app.get("/userdata/{user_id}",  tags=['userdata'])
-async def userdata(user_id):
+async def userdata(user_id : str):
 
     '''
     Devuelve la cantidad de dinero gastado por el usuario, el porcentaje de recomendación y cantidad de items
              
     Parametro
     ---------
-    str
-        user_id : Identificador del usuario.
+              user_id : Identificador unico del usuario.
     
     Retorna
-    -------
-        dict: Diccionario 
-              
+    -------   
               Cantidad Dinero          : Cantidad de dinero gastado.
               Porcentaje Recomendacion : Porcentaje de recomendaciones.
               Total de Items           : Cantidad de items.
     '''
-    los_juegos = df_developer[['item_id','price']]
-    el_usuario = df_user_review[df_user_review['user_id'] == user_id]
+    try:
+        los_juegos = df_developer[['item_id','price']]
+        el_usuario = df_user_review[df_user_review['user_id'] == user_id]
+    except :
+        return 'Ocurrio un error para este usuario'
     recomendado = round(el_usuario[el_usuario["recommend"] == True].count() / (el_usuario[el_usuario["recommend"]==True].count() + 
                                                                             el_usuario[el_usuario["recommend"]==False].count()) * 100,2).iloc[0]
     
@@ -104,3 +131,65 @@ async def userdata(user_id):
     diccionario = dict(zip(claves,valor))
 
     return "No existen registros" if len(los_juegos) == 0 else diccionario
+
+# Endpoint http://127.0.0.1:8000/recomendacion_juego/{item_id}
+@app.get("/recomendacion_juego/{item_id}",  tags=['recomendacion'])
+async def recomendacion_juego (item_id : int):
+    '''
+    Devuelve una cantidad de 5 juegos recomendado a partir del identifcador de un juego
+             
+    Parametro
+    ---------
+             item_id : Identificador unico del juego.
+    
+    Retorna
+    -------   
+             Diccionario con una lista de 5 juegos similiares recomendados a partir del ingresado
+    '''
+
+    producto = df_sentiment_analysis[df_sentiment_analysis['item_id'] == item_id]
+    if not producto.empty:
+        product_index = producto.index[0]
+        product_similarities = similarity_matrix[product_index]
+        most_similar_products_indices = np.argsort(-product_similarities)
+        most_similar_products = df_sentiment_analysis.loc[most_similar_products_indices, 'item_name']
+    else:
+        return "Producto no encontrado"
+    
+    diccionario = {"Juegos recomendados" : list()}
+    similares = most_similar_products[:5]
+    diccionario["Juegos recomendados"] = [similar for similar in similares]
+    diccionario
+
+    return diccionario
+
+# Endpoint http://127.0.0.1:8000/recomendacion_usuario/{user_id}
+@app.get("/recomendacion_usuario/{user_id}",  tags=['recomendacion'])
+async def recomendacion_usuario (user_id):
+    '''
+    Devuelve una cantidad de 5 juegos recomendado a partir del identifcador unico de un usuario
+             
+    Parametro
+    ---------
+             user_id : Identificador unico del juego.
+    
+    Retorna
+    -------   
+             Diccionario con una lista de 5 juegos similares recomendados por un usuario
+    '''
+
+    producto = df_sentiment_analysis[df_sentiment_analysis['user_id'] == user_id]
+    if not producto.empty:
+        product_index = producto.index[0]
+        product_similarities = similarity_matrix[product_index]
+        most_similar_products_indices = np.argsort(-product_similarities)
+        most_similar_products = df_sentiment_analysis.loc[most_similar_products_indices, 'item_name']
+    else:
+        return "Producto no encontrado"
+    
+    diccionario = {"Juegos recomendados" : list()}
+    similares = most_similar_products[:5]
+    diccionario["Juegos recomendados"] = [similar for similar in similares]
+    diccionario
+
+    return diccionario
