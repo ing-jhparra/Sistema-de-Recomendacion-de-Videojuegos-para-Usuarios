@@ -159,7 +159,7 @@ userdata
 
 Para probar ingrese :
 
-Walker1183
+Walker1183 <br>
 farnellthedog
 
 ![Informacion de un usuario)](img/userdata.png)
@@ -172,7 +172,7 @@ recomendacion por juego
 
 Para probar ingrese :
 
-11610
+11610 <br>
 25000
 
 ![Informacion de un usuario)](img/recomendacion_juego_item.png)
@@ -185,7 +185,7 @@ recomendacion por usuario
 
 Para probar ingrese :
 
-Killyis
+Killyis <br>
 farnellthedog
 
 ![Informacion de un usuario)](img/recomendacion_juego_usuario.png)
