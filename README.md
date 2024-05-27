@@ -14,9 +14,9 @@
 
 * [Datasets](#Datasets)
 
-* [Modelo Similitud del Coseno](#Modelo Similitud del Coseno)
+* [Modelo Similitud del Coseno](#Modelo-Similitud-del-Coseno)
 
-* [API's](#Datasets)
+* [API's](#Api's)
 
 * [Glosario](#Glosario)
 
@@ -136,6 +136,52 @@ Instanciamos la clase TfidfVectorizer, luego entrena y aplica la transformacion.
 vectorizer = TfidfVectorizer()
 tfidf_matrix = vectorizer.fit_transform(df_sentiment_analysis["review"])
 ```
+
+# Api
+
+La Api
+
+![Sistema de Recomendacion de videojuegos)](img/api.png)
+
+developer
+
+![Informacion de una empresa desarrolladora)](img/desarrollador.png)
+
+Respuesta
+
+![Respuesta esperada)](img/respuesta_desarrollador.png)
+
+userdata
+
+![Informacion de un usuario)](img/userdata.png)
+
+Respuesta
+
+![Respuesta esperada)](img/respuesta_userdata.png)
+
+recomendacion por juego
+
+![Informacion de un usuario)](img/recomendacion_juego_item.png)
+
+Respuesta
+
+![Respuesta esperada)](img/recomendacion_juego_item.png)
+
+recomendacion por usuario
+
+![Informacion de un usuario)](img/recomendacion_juego_usuario.png)
+
+Respuesta
+
+![Respuesta esperada)](img/respuesta_user.png)
+
+userdata
+recomendacion
+
+
+
+[vamos a este enlace para ver la Api](https://sistema-de-recomendacion-de-videojuegos-a6c3.onrender.com/docs)
+
 
 # Glosario
 
