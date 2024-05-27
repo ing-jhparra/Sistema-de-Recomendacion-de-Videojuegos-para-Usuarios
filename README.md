@@ -165,7 +165,7 @@ recomendacion por juego
 
 Respuesta
 
-![Respuesta esperada)](img/recomendacion_juego_item.png)
+![Respuesta esperada)](img/respuesta_item.png)
 
 recomendacion por usuario
 
