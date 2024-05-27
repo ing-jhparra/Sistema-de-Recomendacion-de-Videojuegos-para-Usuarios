@@ -1,9 +1,5 @@
 ![Machine Learning Operations (MLOps)](img/Machine_Learning.png)
 
-<h4 align="center">
-:construction: Tema en fase de desarrollo y prueba :construction:
-</h4>
-
 # Contenido
 
 * [Introducción](#Introducción)
@@ -139,6 +135,10 @@ tfidf_matrix = vectorizer.fit_transform(df_sentiment_analysis["review"])
 
 # Api
 
+<h4 align="center">
+:construction: Tema desarrollo :construction:
+</h4>
+
 La Api
 
 ![Sistema de Recomendacion de videojuegos)](img/api.png)
@@ -167,7 +167,6 @@ Respuesta
 
 ![Respuesta esperada)](img/respuesta_item.png)
 
-recomendacion por usuario
 
 ![Informacion de un usuario)](img/recomendacion_juego_usuario.png)
 
