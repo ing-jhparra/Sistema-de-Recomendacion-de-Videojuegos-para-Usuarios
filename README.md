@@ -136,7 +136,7 @@ tfidf_matrix = vectorizer.fit_transform(df_sentiment_analysis["review"])
 # Api
 
 <h4 align="center">
-:construction: Tema desarrollo :construction:
+:construction: Tema en desarrollo :construction:
 </h4>
 
 La Api
@@ -144,6 +144,10 @@ La Api
 ![Sistema de Recomendacion de videojuegos)](img/api.png)
 
 developer
+
+Para probar ingrese :
+
+Valve
 
 ![Informacion de una empresa desarrolladora)](img/desarrollador.png)
 
@@ -153,6 +157,11 @@ Respuesta
 
 userdata
 
+Para probar ingrese :
+
+Walker1183
+farnellthedog
+
 ![Informacion de un usuario)](img/userdata.png)
 
 Respuesta
@@ -161,12 +170,23 @@ Respuesta
 
 recomendacion por juego
 
+Para probar ingrese :
+
+11610
+25000
+
 ![Informacion de un usuario)](img/recomendacion_juego_item.png)
 
 Respuesta
 
 ![Respuesta esperada)](img/respuesta_item.png)
 
+recomendacion por usuario
+
+Para probar ingrese :
+
+Killyis
+farnellthedog
 
 ![Informacion de un usuario)](img/recomendacion_juego_usuario.png)
 
@@ -174,7 +194,7 @@ Respuesta
 
 ![Respuesta esperada)](img/respuesta_user.png)
 
-[vamos a este enlace para ver la Api](https://sistema-de-recomendacion-de-videojuegos-a6c3.onrender.com/docs)
+[Vamos a este enlace para ver la Api](https://sistema-de-recomendacion-de-videojuegos-a6c3.onrender.com/docs)
 
 
 # Glosario
