@@ -174,11 +174,6 @@ Respuesta
 
 ![Respuesta esperada)](img/respuesta_user.png)
 
-userdata
-recomendacion
-
-
-
 [vamos a este enlace para ver la Api](https://sistema-de-recomendacion-de-videojuegos-a6c3.onrender.com/docs)
 
 
