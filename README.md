@@ -132,6 +132,10 @@ Instanciamos la clase TfidfVectorizer, luego entrena y aplica la transformacion.
 vectorizer = TfidfVectorizer()
 tfidf_matrix = vectorizer.fit_transform(df_sentiment_analysis["review"])
 ```
+En el proceso de analisis podemos observar a traves de una nube de palabras los mas jugados
+
+![Los mas Jugados](img/nube_palabras2.png)
+
 
 # Api
 
