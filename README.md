@@ -1,5 +1,7 @@
 ![Machine Learning Operations (MLOps)](img/Machine_Learning.png)
 
+[Si quiere ir directo a la Api en Render, clic aqui](https://sistema-de-recomendacion-de-videojuegos-a6c3.onrender.com/docs)
+
 # Contenido
 
 * [Introducción](#Introducción)
@@ -30,7 +32,7 @@ Existen tres tipos principales de Machine Learning:
 
 Machine Learning está transformando diversos sectores : Salud, Finanzas, Marketing, Manufactura, Transporte, y seguirá evolucionando a pasos agigantados, impulsado por el aumento de datos disponibles, el desarrollo de algoritmos más potentes y la mayor accesibilidad a la computación en la nube. Se espera que tenga un impacto aún mayor en la sociedad, mejorando la calidad de vida y creando nuevas oportunidades en diversos campos.
 
-Descripción del Problema y Propuesta
+# Descripción del Problema y Propuesta
 
 # Problema
 
@@ -198,8 +200,8 @@ Respuesta
 
 ![Respuesta esperada)](img/respuesta_user.png)
 
-[Vamos a este enlace para ver la Api](https://sistema-de-recomendacion-de-videojuegos-a6c3.onrender.com/docs)
 
+[Si quiere ir directo a la Api en Render, clic aqui](https://sistema-de-recomendacion-de-videojuegos-a6c3.onrender.com/docs)
 
 # Glosario
 
