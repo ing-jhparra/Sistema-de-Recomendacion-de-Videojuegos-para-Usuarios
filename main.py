@@ -10,7 +10,7 @@ Año 2024
 
 import numpy as np
 import pandas as pd
-from fastapi import FastAPI, Query
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
@@ -149,7 +149,7 @@ async def userdata(user_id : str):
 
 # Endpoint http://127.0.0.1:8000/UserForGenre/{genero} 
 @app.get("/UserForGenre/{genero}",  tags=['UserForGenre'])
-def UserForGenre(genero : str) :
+async def UserForGenre(genero : str) :
     '''
     <strong>Devuelve el usuario que acumula más horas jugadas para el género dado y una lista de la acumulación de horas jugadas por año de lanzamiento</strong>
              
@@ -173,9 +173,9 @@ def UserForGenre(genero : str) :
 
     return "No existen registros" if len(horas_juagadas) == 0 else diccionario
 
-# Endpoint http://127.0.0.1:8000/UserForGenre/{genero} 
+# Endpoint http://127.0.0.1:8000/best_developer_year/{anio} 
 @app.get("/best_developer_year/{anio}",  tags=['best_developer_year'])
-def best_developer_year(anio : int ) :
+async def best_developer_year(anio : int ) :
     '''
     <strong>Devuelve el top 3 de desarrolladores con juegos MÁS recomendados por usuarios para el año dado</strong>
              
@@ -190,7 +190,6 @@ def best_developer_year(anio : int ) :
               Top 3 : Empresa Desarrolladora, Juegos mas recomendados
     '''
     juegos=los_mejores
-    print(len(juegos))
     juegos=juegos[juegos['year'] == anio]
     reviews_filter=juegos.groupby(['developer']).agg({'sentiment_analysis':'sum'}).reset_index()
     reviews_filter= reviews_filter.sort_values(by= 'sentiment_analysis', ascending= False)
@@ -199,6 +198,37 @@ def best_developer_year(anio : int ) :
     diccionario = {"Top 1":[{'Developer': desarrolladores[0]},{'Reviews positive':positivos[0]}], "Top 2":[{'Developer': desarrolladores[1]},{'Reviews positive':positivos[1]}], "Top 3":[{'Developer': desarrolladores[2]},{'Reviews positive':positivos[2]}]}
 
     return "No existen registros" if len(juegos) == 0 else diccionario
+
+# Endpoint http://127.0.0.1:8000/developer_reviews_analysis/{desarrolladora} 
+@app.get("/developer_reviews_analysis/{desarrolladora}",  tags=['developer_reviews_analysis'])
+async def developer_reviews_analysis(desarrolladora : str):
+    '''
+    <strong>Devuelve un diccionario con el nombre del desarrollador como llave y una lista con la cantidad total de registros de reseñas de usuarios que se encuentren categorizados con un análisis de sentimiento como valor positivo o negativo</strong>
+             
+    Parametro
+    ---------
+              año : Un año. Ejemplo 2024
+    
+    Retorna
+    -------   
+              developer        : Empresa Desarrolladora,
+              positive reviews : Total de valores positivos
+              negative reviews : Total de valores positivos
+    '''
+    positivos = 0
+    juegos = los_mejores[["item_id","developer","sentiment_analysis"]]
+    juegos = juegos[juegos["developer"] == desarrolladora]
+    cantidad = juegos.shape[0]
+    positivos = 0
+    negativos = 0
+    for ind,valor in enumerate(juegos["sentiment_analysis"]):
+        if valor == 2:
+            positivos += 1
+        else :
+            negativos += 1
+    diccioanrio = {"developer" :desarrolladora ,"positive reviews":positivos,"negative reviews":negativos}
+
+    return diccioanrio
 
 # Endpoint http://127.0.0.1:8000/recomendacion_juego/{item_id}
 @app.get("/recomendacion_juego/{item_id}",  tags=['recomendacion'])
