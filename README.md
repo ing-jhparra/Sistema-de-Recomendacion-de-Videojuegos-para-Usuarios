@@ -16,8 +16,6 @@
 
 * [API's](#Api's)
 
-* [Glosario](#Glosario)
-
 * [Recursos](#Recursos)
 
 * [Créditos](#Créditos)
