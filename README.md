@@ -25,11 +25,6 @@
 # Introducción
 El Machine Learning, o Aprendizaje Automático, ha revolucionado la tecnología actual, impulsando la innovación en diversos campos. Es una rama de la Inteligencia Artificial que dota a las máquinas de la capacidad de aprender y mejorar su rendimiento de forma autónoma, sin necesidad de programación explícita.
 
-Existen tres tipos principales de Machine Learning:
-•	Aprendizaje Supervisado
-•	Aprendizaje No Supervisado
-•	Aprendizaje por Refuerzo
-
 Machine Learning está transformando diversos sectores : Salud, Finanzas, Marketing, Manufactura, Transporte, y seguirá evolucionando a pasos agigantados, impulsado por el aumento de datos disponibles, el desarrollo de algoritmos más potentes y la mayor accesibilidad a la computación en la nube. Se espera que tenga un impacto aún mayor en la sociedad, mejorando la calidad de vida y creando nuevas oportunidades en diversos campos.
 
 # Descripción del Problema y Propuesta
@@ -70,12 +65,6 @@ Se propone un plan de trabajo dividido en las siguientes etapas:
 ## Despliegue de la API:
 
 **Utilización de Render o Railway**: Utilizar una plataforma de despliegue como Render o Railway para alojar la API y hacerla accesible en la web.
-
-## Consideraciones adicionales:
-
-* Documentar el código y la API de manera clara y detallada.
-* Implementar pruebas unitarias para garantizar el correcto funcionamiento del código.
-* Considerar la escalabilidad de la API para manejar un mayor volumen de datos y tráfico.
 
 ## Dataset
 
@@ -202,12 +191,6 @@ Respuesta
 
 
 [Si quiere ir directo a la Api en Render, clic aqui](https://sistema-de-recomendacion-de-videojuegos-a6c3.onrender.com/docs)
-
-# Glosario
-
-- **ETL (Extract, Transform, Load)**: Proceso de extracción de datos de una fuente, transformación de los datos para su análisis y carga de los datos en un destino.
-
-- **Machine Learning**: Rama de la inteligencia artificial que permite a los sistemas aprender de los datos sin ser programados explícitamente.
 
 # Recursos
 
