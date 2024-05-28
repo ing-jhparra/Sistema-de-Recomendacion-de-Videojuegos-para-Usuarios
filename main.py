@@ -26,6 +26,7 @@ ruta_developer = r'Datasets/developer.parquet'
 ruta_user_items = r'Datasets/users_items.parquet'
 ruta_user_reviews =  r'Datasets/user_review.parquet'
 ruta_sentiment_analysis =  r'Datasets/sentiment_analysis.parquet'
+ruta_endpoint3 = r'Datasets/endpoint3.parquet'
 
 # Abrir y cargar Dataset para ser utilizados por los endpoints
 
@@ -33,6 +34,7 @@ df_developer = pd.read_parquet(ruta_developer, engine='auto')
 df_user_items = pd.read_parquet(ruta_user_items, engine='auto')
 df_user_review = pd.read_parquet(ruta_user_reviews, engine='auto')
 df_sentiment_analysis = pd.read_parquet(ruta_sentiment_analysis, engine='auto')
+horas_acumuladas = pd.read_parquet(ruta_endpoint3, engine='auto')
 
 # Declaracion y definicion del modelo similitud del coseno para Machine Learning
 # En este ejercicio me base en el siguiente video https://www.youtube.com/watch?v=7nago29IlxM&t=149s
@@ -56,6 +58,16 @@ app = FastAPI(
 # Se muestra en la siguiente ruta un sencillo titulo http://127.0.0.1:8000/
 @app.get('/', tags=['inicio'])
 async def inicio():
+    '''
+                    <strong>PROYECTO INDIVIDUAL Nº1</strong> <br>
+                    <strong>Machine Learning Operations (MLOps)</strong>
+
+    <strong>Alumno</strong>      : Jesus H. Parra B.<br>
+    <strong>Carrera</strong>     : Ciencia de Datos<br>
+    <strong>Cohorte</strong>     : 22<br>
+    <strong>Año</strong>         : 2024  
+    <strong>Correo</strong>                        : parra.jesus@gmail.com            
+    '''
     cuerpo = '<center><h1 style="background-color:#daecfe;">Proyecto Individual Numero 1:<br>Machine Learning Operations (MLOps)</h1></center>'
     return HTMLResponse(cuerpo)
 
@@ -63,7 +75,7 @@ async def inicio():
 @app.get("/developer/{desarrollador}",  tags=['developer'])
 async def developer(desarrollador : str):
     '''
-    Devuelve un diccionario año, cantidad de items y porcentaje de contenido libre por empresa desarrolladora
+    <strong>Devuelve un diccionario año, cantidad de items y porcentaje de contenido libre por empresa desarrolladora</strong>
              
     Parametro
     ---------  
@@ -102,7 +114,7 @@ async def developer(desarrollador : str):
 async def userdata(user_id : str):
 
     '''
-    Devuelve la cantidad de dinero gastado por el usuario, el porcentaje de recomendación y cantidad de items
+    <strong>Devuelve la cantidad de dinero gastado por el usuario, el porcentaje de recomendación y cantidad de items</strong>
              
     Parametro
     ---------
@@ -133,11 +145,36 @@ async def userdata(user_id : str):
 
     return "No existen registros" if len(los_juegos) == 0 else diccionario
 
+# Endpoint http://127.0.0.1:8000/UserForGenre/{genero} 
+@app.get("/UserForGenre/{genero}",  tags=['UserForGenre'])
+def UserForGenre(genero : str) :
+    '''
+    <strong>Devuelve el usuario que acumula más horas jugadas para el género dado y una lista de la acumulación de horas jugadas por año de lanzamiento</strong>
+             
+    Parametro
+    ---------
+              genero : genero del juego
+    
+    Retorna
+    -------   
+              Usuario          : Usuario con mas horas jugadas.
+              Horas jugadas : Lista de diccionario Años vs Horas.
+              
+    '''
+    horas_juagadas = horas_acumuladas[horas_acumuladas["genres"]==genero]
+    usuarios = horas_juagadas.groupby(["user_id","year"]).agg({'horas_juego': 'sum'}).reset_index()
+    jugador_mayor = horas_juagadas["user_id"].loc[0]
+    x_anio = usuarios[usuarios['user_id'] == jugador_mayor][["year","horas_juego"]]
+    x_anio.rename(columns={'year':'Año','horas_juego':'Tiempo'}, inplace=True)
+    anio_juego= x_anio.to_dict('records')
+    diccionario = {"Usuario con mas horas jugadas":jugador_mayor, "Horas jugadas" : anio_juego}
+    return "No existen registros" if len(horas_juagadas) == 0 else diccionario
+
 # Endpoint http://127.0.0.1:8000/recomendacion_juego/{item_id}
 @app.get("/recomendacion_juego/{item_id}",  tags=['recomendacion'])
 async def recomendacion_juego (item_id : int):
     '''
-    Devuelve una cantidad de 5 juegos recomendado a partir del identifcador de un juego
+    <strong>Devuelve una cantidad de 5 juegos recomendado a partir del identifcador de un juego</strong>
              
     Parametro
     ---------
@@ -168,7 +205,7 @@ async def recomendacion_juego (item_id : int):
 @app.get("/recomendacion_usuario/{user_id}",  tags=['recomendacion'])
 async def recomendacion_usuario (user_id):
     '''
-    Devuelve una cantidad de 5 juegos recomendado a partir del identifcador unico de un usuario
+    <strong>Devuelve una cantidad de 5 juegos recomendado a partir del identifcador unico de un usuario</strong>
              
     Parametro
     ---------
