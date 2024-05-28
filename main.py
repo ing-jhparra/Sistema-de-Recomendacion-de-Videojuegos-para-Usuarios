@@ -27,6 +27,7 @@ ruta_user_items = r'Datasets/users_items.parquet'
 ruta_user_reviews =  r'Datasets/user_review.parquet'
 ruta_sentiment_analysis =  r'Datasets/sentiment_analysis.parquet'
 ruta_endpoint3 = r'Datasets/endpoint3.parquet'
+ruta_endpoint4 = r'Datasets/los_mejores.parquet'
 
 # Abrir y cargar Dataset para ser utilizados por los endpoints
 
@@ -35,6 +36,7 @@ df_user_items = pd.read_parquet(ruta_user_items, engine='auto')
 df_user_review = pd.read_parquet(ruta_user_reviews, engine='auto')
 df_sentiment_analysis = pd.read_parquet(ruta_sentiment_analysis, engine='auto')
 horas_acumuladas = pd.read_parquet(ruta_endpoint3, engine='auto')
+los_mejores = pd.read_parquet(ruta_endpoint4, engine='auto')
 
 # Declaracion y definicion del modelo similitud del coseno para Machine Learning
 # En este ejercicio me base en el siguiente video https://www.youtube.com/watch?v=7nago29IlxM&t=149s
@@ -168,7 +170,35 @@ def UserForGenre(genero : str) :
     x_anio.rename(columns={'year':'Año','horas_juego':'Tiempo'}, inplace=True)
     anio_juego= x_anio.to_dict('records')
     diccionario = {"Usuario con mas horas jugadas":jugador_mayor, "Horas jugadas" : anio_juego}
+
     return "No existen registros" if len(horas_juagadas) == 0 else diccionario
+
+# Endpoint http://127.0.0.1:8000/UserForGenre/{genero} 
+@app.get("/best_developer_year/{anio}",  tags=['best_developer_year'])
+def best_developer_year(anio : int ) :
+    '''
+    <strong>Devuelve el top 3 de desarrolladores con juegos MÁS recomendados por usuarios para el año dado</strong>
+             
+    Parametro
+    ---------
+              año : Un año. Ejemplo 2024
+    
+    Retorna
+    -------   
+              Top 1 : Empresa Desarrolladora, Juegos mas recomendados
+              Top 2 : Empresa Desarrolladora, Juegos mas recomendados
+              Top 3 : Empresa Desarrolladora, Juegos mas recomendados
+    '''
+    juegos=los_mejores
+    print(len(juegos))
+    juegos=juegos[juegos['year'] == anio]
+    reviews_filter=juegos.groupby(['developer']).agg({'sentiment_analysis':'sum'}).reset_index()
+    reviews_filter= reviews_filter.sort_values(by= 'sentiment_analysis', ascending= False)
+    desarrolladores =list(reviews_filter.iloc[:,0])
+    positivos =list(reviews_filter.iloc[:,1])
+    diccionario = {"Top 1":[{'Developer': desarrolladores[0]},{'Reviews positive':positivos[0]}], "Top 2":[{'Developer': desarrolladores[1]},{'Reviews positive':positivos[1]}], "Top 3":[{'Developer': desarrolladores[2]},{'Reviews positive':positivos[2]}]}
+
+    return "No existen registros" if len(juegos) == 0 else diccionario
 
 # Endpoint http://127.0.0.1:8000/recomendacion_juego/{item_id}
 @app.get("/recomendacion_juego/{item_id}",  tags=['recomendacion'])
